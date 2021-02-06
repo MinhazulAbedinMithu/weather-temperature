@@ -22,20 +22,48 @@
     <div class="container">
         <form class="col-md-6 m-auto py-5">
             <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="Enter a location for Weather ...">
+                <input id="city-name" type="text" class="form-control" placeholder="Enter a location for Weather ...">
                 <div class="input-group-append">
-                    <button type="button" class="btn btn-danger">Search</button>
+                    <button id="submit" type="button" class="btn btn-danger">Search</button>
                 </div>
             </div>
         </form>
         <div class="weather-status text-white text-center">
-            <img src="https://openweathermap.org/img/wn/02d@2x.png" alt="">
-            <h1>Dhaka</h1>
-            <h3><span>38.06</span>&deg;C</h3>
-            <h1 class="lead">Clouds</h1>
+            <img id="weather-icon" src="https://openweathermap.org/img/wn/02d@2x.png" alt="">
+            <h1 id="city">Dhaka</h1>
+            <h3><span id="city-temp">38.06</span>&deg;C</h3>
+            <h1 id="city-weather" class="lead">Clouds</h1>
         </div>
     </div>
 
+
+    <script>
+        document.getElementById('submit').addEventListener('click', function(event){
+            const cityName = document.getElementById('city-name').value;
+            weather(cityName);
+        })
+
+        function weather(cityName){
+            fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=7edf058751552ebc1b92c2fcca25a515`)
+            .then(response => response.json())
+            .then(data => {
+                 console.log(data.weather[0].icon);
+                let cityTemp = data.main.temp - 273;
+                cityTemp = cityTemp.toFixed(2);
+                const cityWeather = data.weather[0].description;
+                const cityWeatherIcon = data.weather[0].icon;
+                
+                document.getElementById("city").innerText = cityName;
+                document.getElementById("city-temp").innerText = cityTemp;
+                document.getElementById("weather-icon").src = `https://openweathermap.org/img/wn/${cityWeatherIcon}@2x.png`;
+                document.getElementById("city-weather").innerText = cityWeather;
+
+                document.getElementById('city-name').value = '';
+
+            })
+        }
+        
+    </script>
 </body>
 
 </html>
