@@ -47,13 +47,14 @@
             fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=7edf058751552ebc1b92c2fcca25a515`)
             .then(response => response.json())
             .then(data => {
-                 console.log(data.weather[0].icon);
+                 console.log(data.sys.country);
+                 const countryName = data.sys.country;
                 let cityTemp = data.main.temp - 273;
                 cityTemp = cityTemp.toFixed(2);
                 const cityWeather = data.weather[0].description;
                 const cityWeatherIcon = data.weather[0].icon;
                 
-                document.getElementById("city").innerText = cityName;
+                document.getElementById("city").innerText = `${cityName}, ${countryName}`;
                 document.getElementById("city-temp").innerText = cityTemp;
                 document.getElementById("weather-icon").src = `https://openweathermap.org/img/wn/${cityWeatherIcon}@2x.png`;
                 document.getElementById("city-weather").innerText = cityWeather;
